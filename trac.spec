@@ -1,7 +1,3 @@
-# TODO
-# - create initial trac setup, to get file permissions proper?
-# - we have files listed gid=http. must provide it? (yes/no?)
-#
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
@@ -17,6 +13,7 @@ Source2:	%{name}.ico
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
 BuildRequires:	rpmbuild(macros) >= 1.177
+Requires:	group(http)
 Requires:	python >= 2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-sqlite >= 0.4.3
@@ -122,7 +119,7 @@ fi
 %doc AUTHORS ChangeLog INSTALL README THANKS UPGRADE
 %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
-# this group makes it apache specific ... oh well.
+# this group makes it apache specific?
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/htpasswd
 %attr(755,root,root) %{_bindir}/*
 %{_mandir}/man1/trac*.1*
