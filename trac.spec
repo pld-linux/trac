@@ -2,6 +2,7 @@
 # - create initial trac setup, to get file permissions proper?
 # - we have files listed gid=http. must provide it? (yes/no?)
 Summary:	Integrated scm, wiki, issue tracker and project environment
+Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.8
 Release:	0.16
@@ -15,10 +16,10 @@ URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
 BuildRequires:	rpmbuild(macros) >= 1.177
 Requires:	python >= 2.1
-Requires:	python-sqlite >= 0.4.3
-Requires:	subversion >= 1.0.0
-Requires:	python-subversion
 Requires:	python-clearsilver >= 0.9.3
+Requires:	python-sqlite >= 0.4.3
+Requires:	python-subversion
+Requires:	subversion >= 1.0.0
 Requires:	webserver
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -33,6 +34,12 @@ Trac is a minimalistic web-based software project management and
 bug/issue tracking system. It provides an interface to the Subversion
 revision control systems, an integrated wiki, flexible issue tracking
 and convenient report facilities.
+
+%description -l pl
+Trac to minimalistyczny, oparty na WWW zarz±dca projektów i system
+¶ledzenia b³êdów/problemów. Dostarcza interfejs do systemu kontroli
+wersji Subversion, zintegrowane wiki, elastyczne ¶ledzenie problemów
+i wygodne u³atwienia do raportowania.
 
 %prep
 %setup -q
