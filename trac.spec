@@ -116,7 +116,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog COPYING INSTALL README THANKS UPGRADE
+%doc AUTHORS ChangeLog INSTALL README THANKS UPGRADE
 %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 # this group makes it apache specific ... oh well.
