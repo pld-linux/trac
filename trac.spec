@@ -2,14 +2,11 @@
 # - create initial trac setup, to get file permissions proper?
 # - we have files listed gid=http. must provide it? (yes/no?)
 #
-# Conditional build:
-%bcond_with	data		# build data package
-#
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.8
-Release:	0.17
+Release:	0.18
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
@@ -26,11 +23,6 @@ Requires:	python-sqlite >= 0.4.3
 Requires:	python-subversion
 Requires:	subversion >= 1.0.0
 Requires:	webserver
-# for creating bundled trac-env
-%if %{with data}
-BuildRequires:	python-sqlite >= 0.4.3
-BuildRequires:	python-subversion
-%endif
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -68,14 +60,6 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 #%{py_comp} $RPM_BUILD_ROOT%{py_sitescriptdir}
 %{py_ocomp} $RPM_BUILD_ROOT%{py_sitescriptdir}
 
-%if %{with data}
-rm -rf svn
-svnadmin create svn
-PYTHONPATH=. ./scripts/trac-admin \
-	$RPM_BUILD_ROOT/var/lib/%{name}/project initenv Project svn \
-	$RPM_BUILD_ROOT%{_datadir}/templates
-%endif
-
 %{?py_postclean}
 %{?py_hardlink}
 
@@ -99,7 +83,7 @@ if [ -d %{_apache2dir}/httpd.conf ]; then
 fi
 
 if [ "$1" = 1 ]; then
-%banner -e <<EOF
+%banner %{name} -e <<EOF
 
 To create new trac environment run as root:
 # trac-admin /var/lib/trac/project initenv
