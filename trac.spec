@@ -3,22 +3,23 @@
 # - we have files listed gid=http. must provide it? (yes/no?)
 #
 # Conditional build:
-%bcond_without	data		# build data package
+%bcond_with	data		# build data package
 #
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.8
-Release:	0.16
+Release:	0.17
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
 # Source0-md5:	b21a20affba43cb0cea847f336320257
 Source1:	%{name}-apache.conf
+Source2:	%{name}.ico
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
-BuildRequires:	rpmbuild(macros) >= 1.188
+BuildRequires:	rpmbuild(macros) >= 1.177
 Requires:	python >= 2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-sqlite >= 0.4.3
@@ -61,6 +62,7 @@ python ./setup.py install \
 	--root=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
 #%{py_comp} $RPM_BUILD_ROOT%{py_sitescriptdir}
