@@ -1,6 +1,10 @@
 # TODO
 # - create initial trac setup, to get file permissions proper?
 # - we have files listed gid=http. must provide it? (yes/no?)
+#
+# Conditional build:
+%bcond_without	data		# build data package
+#
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
@@ -14,13 +18,18 @@ Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
 Source1:	%{name}-apache.conf
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
-BuildRequires:	rpmbuild(macros) >= 1.177
+BuildRequires:	rpmbuild(macros) >= 1.188
 Requires:	python >= 2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-sqlite >= 0.4.3
 Requires:	python-subversion
 Requires:	subversion >= 1.0.0
 Requires:	webserver
+# for creating bundled trac-env
+%if %{with data}
+BuildRequires:	python-sqlite >= 0.4.3
+BuildRequires:	python-subversion
+%endif
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -56,6 +65,14 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 
 #%{py_comp} $RPM_BUILD_ROOT%{py_sitescriptdir}
 %{py_ocomp} $RPM_BUILD_ROOT%{py_sitescriptdir}
+
+%if %{with data}
+rm -rf svn
+svnadmin create svn
+PYTHONPATH=. ./scripts/trac-admin \
+	$RPM_BUILD_ROOT/var/lib/%{name}/project initenv Project svn \
+	$RPM_BUILD_ROOT%{_datadir}/templates
+%endif
 
 %{?py_postclean}
 %{?py_hardlink}
@@ -107,7 +124,7 @@ if [ "$1" = "0" ]; then
 	fi
 	# apache2
 	if [ -d %{_apache2dir}/httpd.conf ]; then
-		rm -f %{_apache1dir}/httpd.conf/99_%{name}.conf
+		rm -f %{_apache2dir}/httpd.conf/99_%{name}.conf
 		if [ -f /var/lock/subsys/httpd ]; then
 			/etc/rc.d/init.d/httpd restart 1>&2
 		fi
