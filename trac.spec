@@ -1,15 +1,16 @@
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
-Version:	0.8
-Release:	0.18
+Version:	0.8.1
+Release:	0.2
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
-# Source0-md5:	b21a20affba43cb0cea847f336320257
+# Source0-md5:	e90b6236f9716f74a8f111db6c95351a
 Source1:	%{name}-apache.conf
 Source2:	%{name}.ico
+Patch0:		%{name}-svn-1.2.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
 BuildRequires:	rpmbuild(macros) >= 1.177
@@ -17,7 +18,7 @@ Requires:	group(http)
 Requires:	python >= 2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-sqlite >= 0.4.3
-Requires:	python-subversion
+Requires:	python-subversion >= 1.2.0
 Requires:	subversion >= 1.0.0
 Requires:	webserver
 BuildArch:	noarch
@@ -42,6 +43,7 @@ i wygodne u³atwienia do raportowania.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -54,10 +56,6 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
-#%{py_comp} $RPM_BUILD_ROOT%{py_sitescriptdir}
-%{py_ocomp} $RPM_BUILD_ROOT%{py_sitescriptdir}
-
-%{?py_postclean}
 %{?py_hardlink}
 
 %clean
