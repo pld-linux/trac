@@ -56,6 +56,12 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
+# compile the scripts
+%{py_ocomp} $RPM_BUILD_ROOT%{py_sitescriptdir}
+
+# remove .py files, leave just compiled ones.
+%{py_postclean}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
