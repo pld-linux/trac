@@ -56,8 +56,6 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
-%{?py_hardlink}
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
