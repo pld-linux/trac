@@ -60,7 +60,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 %{py_ocomp} $RPM_BUILD_ROOT%{py_sitescriptdir}
 
 # remove .py files, leave just compiled ones.
-%{py_postclean}
+#%%{py_postclean}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
