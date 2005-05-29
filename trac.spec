@@ -2,7 +2,7 @@ Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.8.1
-Release:	0.2
+Release:	0.3
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
@@ -11,6 +11,7 @@ Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
 Source1:	%{name}-apache.conf
 Source2:	%{name}.ico
 Patch0:		%{name}-svn-1.2.patch
+Patch1:		%{name}-siteconfig.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
 BuildRequires:	rpmbuild(macros) >= 1.177
@@ -44,6 +45,7 @@ i wygodne u³atwienia do raportowania.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
