@@ -2,7 +2,7 @@ Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.8.1
-Release:	0.3
+Release:	1
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
