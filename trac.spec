@@ -2,7 +2,7 @@ Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.8.2
-Release:	1
+Release:	2
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
@@ -16,7 +16,7 @@ BuildRequires:	rpmbuild(macros) >= 1.177
 Requires:	group(http)
 Requires:	python >= 2.1
 Requires:	python-clearsilver >= 0.9.3
-Requires:	python-sqlite >= 0.4.3
+Requires:	python-sqlite1 >= 0.4.3
 Requires:	python-subversion >= 1.2.0
 Requires:	subversion >= 1.0.0
 Requires:	webserver
