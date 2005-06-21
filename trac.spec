@@ -1,13 +1,13 @@
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
-Version:	0.8.2
-Release:	2
+Version:	0.8.4
+Release:	1
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
-# Source0-md5:	2a94a4994980baaca3ec6285ca650cd4
+# Source0-md5:	e2b1d0e49deea72928d59ed406a8fc87
 Source1:	%{name}-apache.conf
 Source2:	%{name}.ico
 URL:		http://www.edgewall.com/trac/
