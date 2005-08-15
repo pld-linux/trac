@@ -2,7 +2,7 @@ Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.8.4
-Release:	2
+Release:	3
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
@@ -13,7 +13,7 @@ Source2:	%{name}.ico
 Patch0:	%{name}-util.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
-BuildRequires:	rpmbuild(macros) >= 1.177
+BuildRequires:	rpmbuild(macros) >= 1.226
 Requires:	group(http)
 Requires:	python >= 2.1
 Requires:	python-clearsilver >= 0.9.3
@@ -26,8 +26,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/%{name}
 %define		_datadir	%{_prefix}/share/%{name}
-%define		_apache1dir	/etc/apache
-%define		_apache2dir	/etc/httpd
 
 %description
 Trac is a minimalistic web-based software project management and
@@ -60,27 +58,24 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 %{py_ocomp} $RPM_BUILD_ROOT%{py_sitescriptdir}
 
 # remove .py files, leave just compiled ones.
-#%%{py_postclean}
+%{py_postclean}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-# apache1
-if [ -d %{_apache1dir}/conf.d ]; then
-	ln -sf %{_sysconfdir}/apache.conf %{_apache1dir}/conf.d/99_%{name}.conf
-	if [ -f /var/lock/subsys/apache ]; then
-		/etc/rc.d/init.d/apache restart 1>&2
-	fi
-fi
-# apache2
-if [ -d %{_apache2dir}/httpd.conf ]; then
-	ln -sf %{_sysconfdir}/apache.conf %{_apache2dir}/httpd.conf/99_%{name}.conf
-	if [ -f /var/lock/subsys/httpd ]; then
-		/etc/rc.d/init.d/httpd restart 1>&2
-	fi
-fi
+%triggerin -- apache1 >= 1.3.33-2
+%apache_config_install -v 1 -c %{_sysconfdir}/apache.conf
 
+%triggerun -- apache1 >= 1.3.33-2
+%apache_config_uninstall -v 1
+
+%triggerin -- apache >= 2.0.0
+%apache_config_install -v 2 -c %{_sysconfdir}/apache.conf
+
+%triggerun -- apache >= 2.0.0
+%apache_config_uninstall -v 2
+
+%post
 if [ "$1" = 1 ]; then
 %banner %{name} -e <<EOF
 
@@ -98,27 +93,10 @@ EOF
 
 fi
 
-%preun
-if [ "$1" = "0" ]; then
-	# apache1
-	if [ -d %{_apache1dir}/conf.d ]; then
-		rm -f %{_apache1dir}/conf.d/99_%{name}.conf
-		if [ -f /var/lock/subsys/apache ]; then
-			/etc/rc.d/init.d/apache restart 1>&2
-		fi
-	fi
-	# apache2
-	if [ -d %{_apache2dir}/httpd.conf ]; then
-		rm -f %{_apache2dir}/httpd.conf/99_%{name}.conf
-		if [ -f /var/lock/subsys/httpd ]; then
-			/etc/rc.d/init.d/httpd restart 1>&2
-		fi
-	fi
-fi
-
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog INSTALL README THANKS UPGRADE
+%doc contrib/
 %dir %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 # this group makes it apache specific?
