@@ -13,6 +13,7 @@ Source2:	%{name}.ico
 Patch0:	%{name}-util.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
+BuildRequires:	python-devel >= 2.1
 BuildRequires:	rpmbuild(macros) >= 1.226
 Requires:	group(http)
 Requires:	python >= 2.1
