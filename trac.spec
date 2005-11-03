@@ -1,13 +1,13 @@
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
-Version:	0.8.4
-Release:	3
+Version:	0.9
+Release:	0.1
 Epoch:		0
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
-# Source0-md5:	e2b1d0e49deea72928d59ed406a8fc87
+# Source0-md5:	0d90ea5114b2a2c5285ea2a474da9fdf
 Source1:	%{name}-apache.conf
 Source2:	%{name}.ico
 Patch0:	%{name}-util.patch
@@ -42,7 +42,7 @@ i wygodne u³atwienia do raportowania.
 
 %prep
 %setup -q
-%patch0 -p1
+#%patch0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -110,16 +110,10 @@ fi
 
 %dir %{_datadir}
 %dir %{_datadir}/cgi-bin
-%attr(755,root,root) %{_datadir}/cgi-bin/trac.cgi
+%attr(755,root,root) %{_datadir}/cgi-bin/trac.*cgi
 %{_datadir}/htdocs
 %{_datadir}/templates
 %{_datadir}/wiki-default
+%{_datadir}/wiki-macros
 
-%dir %{py_sitescriptdir}/%{name}
-%{py_sitescriptdir}/%{name}/*.py[co]
-%dir %{py_sitescriptdir}/%{name}/mimeviewers
-%{py_sitescriptdir}/%{name}/mimeviewers/*.py[co]
-%dir %{py_sitescriptdir}/%{name}/upgrades
-%{py_sitescriptdir}/%{name}/upgrades/*.py[co]
-%dir %{py_sitescriptdir}/%{name}/wikimacros
-%{py_sitescriptdir}/%{name}/wikimacros/*.py[co]
+%{py_sitescriptdir}/%{name}
