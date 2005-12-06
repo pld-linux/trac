@@ -1,32 +1,36 @@
+# TODO
+# - lighttpd webapp configuration
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.9.2
-Release:	0.1
-Epoch:		0
+Release:	1
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
 # Source0-md5:	39e3af9e72a4aaa3b0217461638d9c03
 Source1:	%{name}-apache.conf
 Source2:	%{name}.ico
-Patch0:	%{name}-util.patch
+Patch0:		%{name}-util.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 2.1
 BuildRequires:	python-devel >= 2.1
-BuildRequires:	rpmbuild(macros) >= 1.226
+BuildRequires:	rpmbuild(macros) >= 1.264
 Requires:	group(http)
 Requires:	python >= 2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-sqlite1 >= 0.4.3
 Requires:	python-subversion >= 1.2.0
 Requires:	subversion >= 1.0.0
-Requires:	webserver
+Requires:	webapps
+# Requires:	apache(mod_env)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sysconfdir	/etc/%{name}
 %define		_datadir	%{_prefix}/share/%{name}
+%define		_webapps	/etc/webapps
+%define		_webapp		%{name}
+%define		_sysconfdir	%{_webapps}/%{_webapp}
 
 %description
 Trac is a minimalistic web-based software project management and
@@ -52,6 +56,7 @@ python ./setup.py install \
 	--root=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
@@ -64,17 +69,17 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerin -- apache1 >= 1.3.33-2
-%apache_config_install -v 1 -c %{_sysconfdir}/apache.conf
+%triggerin -- apache1
+%webapp_register apache %{_webapp}
 
-%triggerun -- apache1 >= 1.3.33-2
-%apache_config_uninstall -v 1
+%triggerun -- apache1
+%webapp_unregister apache %{_webapp}
 
 %triggerin -- apache >= 2.0.0
-%apache_config_install -v 2 -c %{_sysconfdir}/apache.conf
+%webapp_register httpd %{_webapp}
 
 %triggerun -- apache >= 2.0.0
-%apache_config_uninstall -v 2
+%webapp_unregister httpd %{_webapp}
 
 %post
 if [ "$1" = 1 ]; then
@@ -94,14 +99,58 @@ EOF
 
 fi
 
+%triggerpostun -- %{name} < 0.9.2-0.2
+if [ -f /etc/trac/htpasswd.rpmsave ]; then
+	mv -f %{_sysconfdir}/htpasswd{,.rpmnew}
+	mv -f /etc/trac/htpasswd.rpmsave %{_sysconfdir}/htpasswd
+fi
+
+# migrate from apache-config macros
+if [ -f /etc/trac/apache.conf.rpmsave ]; then
+	if [ -d /etc/apache/webapps.d ]; then
+		cp -f %{_sysconfdir}/apache.conf{,.rpmnew}
+		cp -f /etc/trac/apache.conf.rpmsave %{_sysconfdir}/apache.conf
+	fi
+
+	if [ -d /etc/httpd/webapps.d ]; then
+		cp -f %{_sysconfdir}/httpd.conf{,.rpmnew}
+		cp -f /etc/trac/apache.conf.rpmsave %{_sysconfdir}/httpd.conf
+	fi
+	rm -f /etc/trac/apache.conf.rpmsave
+fi
+
+# register webapp on apaches which were registered earlier
+if [ -L /etc/apache/conf.d/99_trac.conf ]; then
+	rm -f /etc/apache/conf.d/99_trac.conf
+	/usr/sbin/webapp register apache %{_webapp}
+	apache_reload=1
+fi
+if [ -L /etc/httpd/httpd.conf/99_trac.conf ]; then
+	rm -f /etc/httpd/httpd.conf/99_trac.conf
+	/usr/sbin/webapp register httpd %{_webapp}
+	httpd_reload=1
+fi
+
+if [ "$httpd_reload" ]; then
+	if [ -f /var/lock/subsys/httpd ]; then
+		/etc/rc.d/init.d/httpd reload 1>&2
+	fi
+fi
+if [ "$apache_reload" ]; then
+	if [ -f /var/lock/subsys/apache ]; then
+		/etc/rc.d/init.d/apache reload 1>&2
+	fi
+fi
+
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog INSTALL README THANKS UPGRADE
 %doc contrib/
-%dir %{_sysconfdir}
+%dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
-# this group makes it apache specific?
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/htpasswd
+
 %attr(755,root,root) %{_bindir}/*
 %{_mandir}/man1/trac*.1*
 
