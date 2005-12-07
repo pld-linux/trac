@@ -13,11 +13,11 @@ Source1:	%{name}-apache.conf
 Source2:	%{name}.ico
 Patch0:		%{name}-util.patch
 URL:		http://www.edgewall.com/trac/
-BuildRequires:	python >= 2.1
-BuildRequires:	python-devel >= 2.1
+BuildRequires:	python >= 1:2.1
+BuildRequires:	python-devel >= 1:2.1
 BuildRequires:	rpmbuild(macros) >= 1.264
 Requires:	group(http)
-Requires:	python >= 2.1
+Requires:	python >= 1:2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-sqlite1 >= 0.4.3
 Requires:	python-subversion >= 1.2.0
