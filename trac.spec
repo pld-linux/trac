@@ -15,7 +15,7 @@ Patch0:		%{name}-util.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 1:2.1
 BuildRequires:	python-devel >= 1:2.1
-BuildRequires:	rpmbuild(macros) >= 1.264
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	group(http)
 Requires:	python >= 1:2.1
 Requires:	python-clearsilver >= 0.9.3
@@ -23,7 +23,8 @@ Requires:	python-sqlite1 >= 0.4.3
 Requires:	python-subversion >= 1.2.0
 Requires:	subversion >= 1.0.0
 Requires:	webapps
-# Requires:	apache(mod_env)
+#Suggests:	apache(mod_env)
+#Suggests:	apache-mod_python >= 3.1.3
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -41,8 +42,8 @@ and convenient report facilities.
 %description -l pl
 Trac to minimalistyczny, oparty na WWW zarz±dca projektów i system
 ¶ledzenia b³êdów/problemów. Dostarcza interfejs do systemu kontroli
-wersji Subversion, zintegrowane wiki, elastyczne ¶ledzenie problemów
-i wygodne u³atwienia do raportowania.
+wersji Subversion, zintegrowane wiki, elastyczne ¶ledzenie problemów i
+wygodne u³atwienia do raportowania.
 
 %prep
 %setup -q
@@ -132,14 +133,10 @@ if [ -L /etc/httpd/httpd.conf/99_trac.conf ]; then
 fi
 
 if [ "$httpd_reload" ]; then
-	if [ -f /var/lock/subsys/httpd ]; then
-		/etc/rc.d/init.d/httpd reload 1>&2
-	fi
+	%service -q httpd reload
 fi
 if [ "$apache_reload" ]; then
-	if [ -f /var/lock/subsys/apache ]; then
-		/etc/rc.d/init.d/apache reload 1>&2
-	fi
+	%service -q apache reload
 fi
 
 %files
