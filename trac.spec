@@ -15,13 +15,13 @@ Patch0:		%{name}-util.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 1:2.1
 BuildRequires:	python-devel >= 1:2.1
+BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	group(http)
 Requires:	python >= 1:2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-sqlite1 >= 0.4.3
 Requires:	python-subversion >= 1.2.0
-Requires:	rpm-pythonprov
 Requires:	subversion >= 1.0.0
 Requires:	webapps
 #Suggests:	apache(mod_env)
