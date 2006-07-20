@@ -1,16 +1,15 @@
-# TODO
-# - lighttpd webapp configuration
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
 Version:	0.9.5
-Release:	1
+Release:	1.1
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
 # Source0-md5:	3b7d708eaf905cc6ba2b6b10a09a8cf4
 Source1:	%{name}-apache.conf
-Source2:	%{name}.ico
+Source2:	%{name}-lighttpd.conf
+Source3:	%{name}.ico
 Patch0:		%{name}-util.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 1:2.1
@@ -24,6 +23,13 @@ Requires:	python-sqlite1 >= 0.4.3
 Requires:	python-subversion >= 1.2.0
 Requires:	subversion >= 1.0.0
 Requires:	webapps
+# for lighttpd:
+Requires:	webserver(alias)
+#Requires:	webserver(rewrite)
+# for apache:
+#Requires:	webserver(auth)
+#Requires:	webserver(env)
+#Suggests:	webserver(cgi)
 #Suggests:	apache(mod_env)
 #Suggests:	apache-mod_python >= 3.1.3
 BuildArch:	noarch
@@ -59,7 +65,8 @@ python ./setup.py install \
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
-install %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
+install %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
 # compile the scripts
@@ -83,6 +90,12 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- apache < 2.2.0, apache-base
 %webapp_unregister httpd %{_webapp}
 
+%triggerin -- lighttpd
+%webapp_register lighttpd %{_webapp}
+
+%triggerun -- lighttpd
+%webapp_unregister lighttpd %{_webapp}
+
 %post
 if [ "$1" = 1 ]; then
 %banner %{name} -e <<EOF
@@ -101,45 +114,6 @@ EOF
 
 fi
 
-%triggerpostun -- %{name} < 0.9.2-0.2
-if [ -f /etc/trac/htpasswd.rpmsave ]; then
-	mv -f %{_sysconfdir}/htpasswd{,.rpmnew}
-	mv -f /etc/trac/htpasswd.rpmsave %{_sysconfdir}/htpasswd
-fi
-
-# migrate from apache-config macros
-if [ -f /etc/trac/apache.conf.rpmsave ]; then
-	if [ -d /etc/apache/webapps.d ]; then
-		cp -f %{_sysconfdir}/apache.conf{,.rpmnew}
-		cp -f /etc/trac/apache.conf.rpmsave %{_sysconfdir}/apache.conf
-	fi
-
-	if [ -d /etc/httpd/webapps.d ]; then
-		cp -f %{_sysconfdir}/httpd.conf{,.rpmnew}
-		cp -f /etc/trac/apache.conf.rpmsave %{_sysconfdir}/httpd.conf
-	fi
-	rm -f /etc/trac/apache.conf.rpmsave
-fi
-
-# register webapp on apaches which were registered earlier
-if [ -L /etc/apache/conf.d/99_trac.conf ]; then
-	rm -f /etc/apache/conf.d/99_trac.conf
-	/usr/sbin/webapp register apache %{_webapp}
-	apache_reload=1
-fi
-if [ -L /etc/httpd/httpd.conf/99_trac.conf ]; then
-	rm -f /etc/httpd/httpd.conf/99_trac.conf
-	/usr/sbin/webapp register httpd %{_webapp}
-	httpd_reload=1
-fi
-
-if [ "$httpd_reload" ]; then
-	%service -q httpd reload
-fi
-if [ "$apache_reload" ]; then
-	%service -q apache reload
-fi
-
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog INSTALL README THANKS UPGRADE
@@ -147,6 +121,7 @@ fi
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/htpasswd
 
 %attr(755,root,root) %{_bindir}/*
