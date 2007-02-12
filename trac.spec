@@ -1,5 +1,5 @@
 Summary:	Integrated scm, wiki, issue tracker and project environment
-Summary(pl.UTF-8):   Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
+Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.10.3
 Release:	1
