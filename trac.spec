@@ -1,5 +1,5 @@
 Summary:	Integrated scm, wiki, issue tracker and project environment
-Summary(pl):	Zintegrowane scm, wiki, system 秎edzenia problem體 i 秗odowisko projektowe
+Summary(pl.UTF-8):   Zintegrowane scm, wiki, system 艣ledzenia problem贸w i 艣rodowisko projektowe
 Name:		trac
 Version:	0.10.3
 Release:	1
@@ -46,11 +46,11 @@ bug/issue tracking system. It provides an interface to the Subversion
 revision control systems, an integrated wiki, flexible issue tracking
 and convenient report facilities.
 
-%description -l pl
-Trac to minimalistyczny, oparty na WWW zarz眃ca projekt體 i system
-秎edzenia b酬d體/problem體. Dostarcza interfejs do systemu kontroli
-wersji Subversion, zintegrowane wiki, elastyczne 秎edzenie problem體 i
-wygodne u砤twienia do raportowania.
+%description -l pl.UTF-8
+Trac to minimalistyczny, oparty na WWW zarz膮dca projekt贸w i system
+艣ledzenia b艂臋d贸w/problem贸w. Dostarcza interfejs do systemu kontroli
+wersji Subversion, zintegrowane wiki, elastyczne 艣ledzenie problem贸w i
+wygodne u艂atwienia do raportowania.
 
 %prep
 %setup -q
