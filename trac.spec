@@ -1,12 +1,12 @@
 Summary:	Integrated scm, wiki, issue tracker and project environment
 Summary(pl):	Zintegrowane scm, wiki, system ¶ledzenia problemów i ¶rodowisko projektowe
 Name:		trac
-Version:	0.9.6
+Version:	0.10.3.1
 Release:	1
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
-# Source0-md5:	1f6bb25107612b7d0566e21ea133f266
+# Source0-md5:	b625af0ca7cab8b7f79d92778efd6d7d
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source3:	%{name}.ico
@@ -78,10 +78,10 @@ install %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerin -- apache1
+%triggerin -- apache1 < 1.3.37-3, apache1-base
 %webapp_register apache %{_webapp}
 
-%triggerun -- apache1
+%triggerun -- apache1 < 1.3.37-3, apache1-base
 %webapp_unregister apache %{_webapp}
 
 %triggerin -- apache < 2.2.0, apache-base
