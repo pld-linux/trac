@@ -23,15 +23,14 @@ Requires:	python-sqlite1 >= 0.4.3
 Requires:	python-subversion >= 1.2.0
 Requires:	subversion >= 1.0.0
 Requires:	webapps
-# for lighttpd:
+Requires:	webserver(access)
 Requires:	webserver(alias)
-#Requires:	webserver(rewrite)
-# for apache:
 #Requires:	webserver(auth)
 #Requires:	webserver(env)
-#Suggests:	webserver(cgi)
+#Requires:	webserver(rewrite)
 #Suggests:	apache(mod_env)
 #Suggests:	apache-mod_python >= 3.1.3
+#Suggests:	webserver(cgi)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
