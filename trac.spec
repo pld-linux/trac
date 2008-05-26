@@ -3,7 +3,7 @@ Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środo
 Name:		trac
 Version:	0.10.4
 Release:	1
-License:	GPL
+License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
 # Source0-md5:	52a3a21ad9faafc3b59cbeb87d5a69d2
