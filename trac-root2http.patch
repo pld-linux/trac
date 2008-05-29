@@ -1,0 +1,32 @@
+--- trac-0.10.4/scripts/trac-admin~	2007-04-20 16:41:44.000000000 +0300
++++ trac-0.10.4/scripts/trac-admin	2008-05-29 18:50:02.424943471 +0300
+@@ -16,7 +16,28 @@
+  individuals. For the exact contribution history, see the revision
+  history and logs, available at http://trac.edgewall.org/log/."""
+ 
+-import sys
++import sys, os
++
++# switch to http user if ran as root
++if os.getuid() == 0:
++	import pwd
++	import grp
++
++	user = 'http'
++	group = 'http'
++
++	uid = pwd.getpwnam(user)[2]
++	gid = pwd.getpwnam(group)[2]
++
++	os.setgid(gid);
++	l = [gid]
++	for groupname, password, gidn, userlist in grp.getgrall():
++		if user in userlist:
++			l.append(gidn)
++	os.setgroups(l)
++	os.setegid(gid);
++	os.setuid(uid);
++	os.seteuid(uid);
+ 
+ from trac.scripts.admin import run
+ sys.exit(run(sys.argv[1:]))
