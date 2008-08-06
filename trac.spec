@@ -31,6 +31,7 @@ Requires:	webserver(alias)
 #Requires:	webserver(rewrite)
 #Suggests:	apache(mod_env)
 #Suggests:	apache-mod_python >= 3.1.3
+#Suggests:	lighttpd-mod_fastcgi
 #Suggests:	webserver(cgi)
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
