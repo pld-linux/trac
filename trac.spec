@@ -13,12 +13,12 @@
 Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
-Version:	0.11
-Release:	0.10
+Version:	0.11.1
+Release:	0.1
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
-# Source0-md5:	5d51f7f9a85b57e8e69bfad9ad68ee07
+# Source0-md5:	d94c2792c8eefc99e8017d5079ebc488
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source3:	%{name}.ico
