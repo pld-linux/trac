@@ -14,7 +14,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.11.1
-Release:	0.1
+Release:	0.5
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -23,7 +23,7 @@ Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source3:	%{name}.ico
 Source4:	%{name}.ini
-#Patch0: %{name}-root2http.patch
+Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 1:2.1
@@ -31,6 +31,7 @@ BuildRequires:	python-devel >= 1:2.1
 BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	sed >= 4.0
 Requires:	group(http)
 Requires:	python >= 1:2.1
 Requires:	python-clearsilver >= 0.9.3
@@ -46,10 +47,10 @@ Requires:	webserver(alias)
 #Suggests:	apache(mod_env)
 #Suggests:	apache-mod_python >= 3.1.3
 #Suggests:	lighttpd-mod_fastcgi
-Suggests:	python-docutils >= 0.6
-Suggests:	python-pygments >= 0.6
-Suggests:	python-silvercity >= 0.9.4
-Suggests:	python-textile >= 2.0
+#Suggests:	python-docutils >= 0.6
+#Suggests:	python-pygments >= 0.6
+#Suggests:	python-silvercity >= 0.9.4
+#Suggests:	python-textile >= 2.0
 #Suggests:	webserver(auth)
 #Suggests:	webserver(cgi)
 Obsoletes:	trac-plugin-webadmin
@@ -75,7 +76,7 @@ wygodne ułatwienia do raportowania.
 
 %prep
 %setup -q -n Trac-%{version}
-#%patch0 -p1
+%patch0 -p1
 %patch1 -p1
 
 %install
@@ -94,6 +95,7 @@ install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 install -d $RPM_BUILD_ROOT%{_appdir}/cgi-bin
 mv $RPM_BUILD_ROOT{%{py_sitescriptdir}/trac,%{_appdir}}/htdocs
 for a in $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/admin/templates/deploy_trac.*; do
+	%{__sed} -i -e 's,${executable},%{__python},g' $a
 	mv $a $RPM_BUILD_ROOT%{_appdir}/cgi-bin/${a##*deploy_}
 done
 
