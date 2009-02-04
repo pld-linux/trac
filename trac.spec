@@ -10,11 +10,12 @@
 #    [inherit]
 #    plugins_dir = /etc/trac/plugins/
 #    templates_dir = /etc/trac/templates/
+# - 21:07:41  jtiai> set htdocs_location in trac ini to for example /trac-htdocs/
 Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.11.2.1
-Release:	0.1
+Release:	1
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
