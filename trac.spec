@@ -1,41 +1,64 @@
-Summary:	Integrated scm, wiki, issue tracker and project environment
+# TODO
+# - package global files for inheritance, make initial projects use inherit:
+#   http://trac.edgewall.org/browser/tags/trac-0.11/RELEASE --
+#   [inherit]
+#    file = /etc/trac/trac.ini
+#    This will load the configuration from the /etc/trac/trac.ini file, while
+#    of course allowing to override any global settings in the environment's
+#    configuration.
+#    In that global configuration, you can specify shared directories for templates and plugins, e.g.:
+#    [inherit]
+#    plugins_dir = /etc/trac/plugins/
+#    templates_dir = /etc/trac/templates/
+# - 21:07:41  jtiai> set htdocs_location in trac ini to for example /trac-htdocs/
+Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
-Version:	0.10.5
-Release:	4
+Version:	0.11.2.1
+Release:	1
 License:	BSD-like
 Group:		Applications/WWW
-Source0:	http://ftp.edgewall.com/pub/trac/%{name}-%{version}.tar.gz
-# Source0-md5:	614aa61af201b33f8cd292344f434dbb
+Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
+# Source0-md5:	984ade4c234539f50c738d6a55a45e80
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source3:	%{name}.ico
+Source4:	%{name}.ini
 Patch0:		%{name}-root2http.patch
+Patch1:		%{name}-defaults.patch
 URL:		http://www.edgewall.com/trac/
 BuildRequires:	python >= 1:2.1
 BuildRequires:	python-devel >= 1:2.1
+BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	sed >= 4.0
 Requires:	group(http)
 Requires:	python >= 1:2.1
 Requires:	python-clearsilver >= 0.9.3
+Requires:	python-genshi
 Requires:	python-setuptools >= 0.6-1.c8.1.1
 Requires:	python-sqlite1 >= 0.4.3
 Requires:	python-subversion >= 1.2.0
 Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
-#Requires:	webserver(auth)
-#Requires:	webserver(env)
 #Requires:	webserver(rewrite)
+#Requires:	webserver(setenv)
 #Suggests:	apache(mod_env)
 #Suggests:	apache-mod_python >= 3.1.3
 #Suggests:	lighttpd-mod_fastcgi
+#Suggests:	python-docutils >= 0.6
+#Suggests:	python-pygments >= 0.6
+#Suggests:	python-silvercity >= 0.9.4
+#Suggests:	python-textile >= 2.0
+#Suggests:	webserver(auth)
 #Suggests:	webserver(cgi)
+Obsoletes:	trac-plugin-webadmin
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_datadir	%{_prefix}/share/%{name}
+%define		_appdir		%{_datadir}/%{name}
 %define		_webapps	/etc/webapps
 %define		_webapp		%{name}
 %define		_sysconfdir	%{_webapps}/%{_webapp}
@@ -53,27 +76,39 @@ wersji Subversion, zintegrowane wiki, elastyczne śledzenie problemów i
 wygodne ułatwienia do raportowania.
 
 %prep
-%setup -q
+%setup -q -n Trac-%{version}
 %patch0 -p1
+%patch1 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},/var/lib/%{name}}
 
-python ./setup.py install \
+%{__python} setup.py install \
 	--root=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
-install %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/htdocs/%{name}.ico
+
+# keep paths from 0.10 install, we want fixed paths so we do not have to update
+# webserver config each time with the upgrade.
+install -d $RPM_BUILD_ROOT%{_appdir}/cgi-bin
+mv $RPM_BUILD_ROOT{%{py_sitescriptdir}/trac,%{_appdir}}/htdocs
+for a in $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/admin/templates/deploy_trac.*; do
+	%{__sed} -i -e 's,${executable},%{__python},g' $a
+	mv $a $RPM_BUILD_ROOT%{_appdir}/cgi-bin/${a##*deploy_}
+done
+
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
+install %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
 # compile the scripts
-%{py_ocomp} $RPM_BUILD_ROOT%{py_sitescriptdir}
+#%py_ocomp $RPM_BUILD_ROOT%{py_sitescriptdir}
 
 # remove .py files, leave just compiled ones.
-%{py_postclean}
+%py_postclean
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -123,19 +158,24 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lighttpd.conf
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/htpasswd
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/trac.ini
 
-%attr(755,root,root) %{_bindir}/*
-%{_mandir}/man1/trac*.1*
+%attr(755,root,root) %{_bindir}/trac-admin
+%attr(755,root,root) %{_bindir}/tracd
+
+#%{_mandir}/man1/trac*.1*
+
+%dir %{_appdir}
+%dir %{_appdir}/cgi-bin
+%attr(755,root,root) %{_appdir}/cgi-bin/trac.*cgi
+%attr(755,root,root) %{_appdir}/cgi-bin/trac.wsgi
+%{_appdir}/htdocs
+#%{_datadir}/templates
+#%{_datadir}/wiki-default
+#%{_datadir}/wiki-macros
+
+%{py_sitescriptdir}/%{name}
+%{py_sitescriptdir}/Trac-*.egg-info
 
 # project data is stored there
 %attr(2770,root,http) %dir /var/lib/trac
-
-%dir %{_datadir}
-%dir %{_datadir}/cgi-bin
-%attr(755,root,root) %{_datadir}/cgi-bin/trac.*cgi
-%{_datadir}/htdocs
-%{_datadir}/templates
-%{_datadir}/wiki-default
-%{_datadir}/wiki-macros
-
-%{py_sitescriptdir}/%{name}
