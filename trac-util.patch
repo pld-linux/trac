@@ -1,0 +1,47 @@
+diff -ur trac-0.8.4-o/trac/Wiki.py trac-0.8.4/trac/Wiki.py
+--- trac-0.8.4-o/trac/Wiki.py	2005-06-17 12:22:32.000000000 -0600
++++ trac-0.8.4/trac/Wiki.py	2005-07-23 20:47:50.000000000 -0600
+@@ -27,7 +27,7 @@
+ 
+ import perm
+ from Module import Module
+-from util import escape, TracError, get_reporter_id
++from trac.util import escape, TracError, get_reporter_id
+ from Session import Session
+ from WikiFormatter import *
+ 
+diff -ur trac-0.8.4-o/trac/WikiFormatter.py trac-0.8.4/trac/WikiFormatter.py
+--- trac-0.8.4-o/trac/WikiFormatter.py	2005-06-17 12:22:32.000000000 -0600
++++ trac-0.8.4/trac/WikiFormatter.py	2005-07-23 21:07:42.000000000 -0600
+@@ -26,7 +26,7 @@
+ import string
+ import StringIO
+ 
+-import util
++from trac import util
+ 
+ __all__ = ['Formatter', 'OneLinerFormatter', 'wiki_to_html', 'wiki_to_oneliner']
+ 
+diff -ur trac-0.8.4-o/trac/core.py trac-0.8.4/trac/core.py
+--- trac-0.8.4-o/trac/core.py	2005-06-17 12:22:31.000000000 -0600
++++ trac-0.8.4/trac/core.py	2005-07-23 21:06:59.000000000 -0600
+@@ -27,8 +27,9 @@
+ import locale
+ import urllib
+ import warnings
+-import util
++import trac
+ from types import ListType
++from trac import util
+ 
+ import Href
+ import perm
+@@ -37,7 +38,7 @@
+ import Environment
+ import Session
+ 
+-from util import sql_to_hdf, TracError
++from trac.util import sql_to_hdf, TracError
+ from __init__ import __version__
+ 
+ warnings.filterwarnings('ignore', 'DB-API extension cursor.next() used')
