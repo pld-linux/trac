@@ -15,7 +15,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.11.3
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -38,7 +38,7 @@ Requires:	python >= 1:2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-genshi
 Requires:	python-setuptools >= 0.6-1.c8.1.1
-Requires:	python-sqlite1 >= 0.4.3
+Requires:	python-sqlite
 Requires:	python-subversion >= 1.2.0
 Requires:	webapps
 Requires:	webserver(access)
