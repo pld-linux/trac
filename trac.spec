@@ -38,7 +38,7 @@ Requires:	python >= 1:2.1
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-genshi
 Requires:	python-setuptools >= 0.6-1.c8.1.1
-Requires:	python-sqlite1 >= 0.4.3
+Requires:	python(sqlite)
 Requires:	python-subversion >= 1.2.0
 Requires:	webapps
 Requires:	webserver(access)
