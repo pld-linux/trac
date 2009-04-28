@@ -15,7 +15,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.11.4
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -34,12 +34,8 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 Requires:	group(http)
-Requires:	python >= 1:2.1
 Requires:	python-clearsilver >= 0.9.3
-Requires:	python-genshi
-Requires:	python-setuptools >= 0.6-1.c8.1.1
-Requires:	python(sqlite)
-Requires:	python-subversion >= 1.2.0
+Requires:	python-trac = %{version}-%{release}
 Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
@@ -74,6 +70,19 @@ Trac to minimalistyczny, oparty na WWW zarządca projektów i system
 śledzenia błędów/problemów. Dostarcza interfejs do systemu kontroli
 wersji Subversion, zintegrowane wiki, elastyczne śledzenie problemów i
 wygodne ułatwienia do raportowania.
+
+%package -n python-trac
+Summary:	Trac Python modules
+Group:		Development/Languages/Python
+Requires:	python >= 1:2.1
+Requires:	python(sqlite)
+Requires:	python-genshi
+Requires:	python-setuptools >= 0.6-1.c8.1.1
+Requires:	python-subversion >= 1.2.0
+Conflicts:	trac < 0.11.4-1.1
+
+%description -n python-trac
+Trac Python modules.
 
 %prep
 %setup -q -n Trac-%{version}
@@ -152,7 +161,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog INSTALL README THANKS UPGRADE
-%doc contrib/
+%doc contrib
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
@@ -174,8 +183,10 @@ fi
 #%{_datadir}/wiki-default
 #%{_datadir}/wiki-macros
 
-%{py_sitescriptdir}/%{name}
-%{py_sitescriptdir}/Trac-*.egg-info
-
 # project data is stored there
 %attr(2770,root,http) %dir /var/lib/trac
+
+%files -n python-trac
+%defattr(644,root,root,755)
+%{py_sitescriptdir}/%{name}
+%{py_sitescriptdir}/Trac-*.egg-info
