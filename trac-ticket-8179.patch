@@ -1,0 +1,12 @@
+Index: /branches/0.11-stable/trac/versioncontrol/svn_fs.py
+===================================================================
+--- /branches/0.11-stable/trac/versioncontrol/svn_fs.py (revision 7999)
++++ /branches/0.11-stable/trac/versioncontrol/svn_fs.py (revision 8015)
+@@ -436,5 +436,6 @@
+         assert self.scope[0] == '/'
+         # we keep root_path_utf8 for  RA 
+-        self.ra_url_utf8 = 'file:///' + root_path_utf8
++        ra_prefix = os.name == 'nt' and 'file:///' or 'file://'
++        self.ra_url_utf8 = ra_prefix + root_path_utf8
+         self.clear()
+ 
