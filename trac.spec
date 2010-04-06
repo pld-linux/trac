@@ -15,7 +15,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.11.7
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -34,6 +34,7 @@ BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 Requires:	group(http)
+Requires:	jquery
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-trac = %{version}-%{release}
 Requires:	webapps
@@ -88,6 +89,9 @@ Trac Python modules.
 %setup -q -n Trac-%{version}
 %patch0 -p1
 %patch1 -p1
+
+# using system jquery package
+rm trac/htdocs/js/jquery.js
 
 %install
 rm -rf $RPM_BUILD_ROOT
