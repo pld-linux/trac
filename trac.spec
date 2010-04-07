@@ -15,7 +15,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.11.7
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -24,6 +24,7 @@ Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source3:	%{name}.ico
 Source4:	%{name}.ini
+Source5:	%{name}-enableplugin.py
 Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
 URL:		http://www.edgewall.com/trac/
@@ -100,9 +101,12 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir},/var/lib/%{name}}
 %{__python} setup.py install \
 	--root=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
-install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
+
+# utility script to enable extra plugins
+install -p %{SOURCE5} $RPM_BUILD_ROOT%{_bindir}/%{name}-enableplugin
 
 # keep paths from 0.10 install, we want fixed paths so we do not have to update
 # webserver config each time with the upgrade.
@@ -113,8 +117,8 @@ for a in $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/admin/templates/deploy_trac.*; 
 	mv $a $RPM_BUILD_ROOT%{_appdir}/cgi-bin/${a##*deploy_}
 done
 
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
-install %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
+cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
+cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
 # compile the scripts
@@ -174,6 +178,7 @@ fi
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/trac.ini
 
 %attr(755,root,root) %{_bindir}/trac-admin
+%attr(755,root,root) %{_bindir}/trac-enableplugin
 %attr(755,root,root) %{_bindir}/tracd
 
 #%{_mandir}/man1/trac*.1*
