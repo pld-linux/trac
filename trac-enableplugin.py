@@ -24,7 +24,7 @@ for file in glob('/var/lib/trac/*/conf/trac.ini'):
         is_present = env.config.has_option('components', component.lower())
         if not is_present:
             env.config.set('components', component, 'enabled')
-            print 'Enabling component %s in %s' % (component, project)
+            print 'Enabling %s in %s' % (component, project)
             changes = True
 
     if changes:
