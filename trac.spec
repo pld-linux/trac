@@ -14,12 +14,12 @@
 Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
-Version:	0.11.7
-Release:	3
+Version:	0.12
+Release:	1
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
-# Source0-md5:	3cd96dad0e4f25d977c422fd6e985e99
+# Source0-md5:	3e8fabbaf8fe889e9c03a7dff09d5d05
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source3:	%{name}.ico
@@ -78,6 +78,7 @@ Summary:	Trac Python modules
 Group:		Development/Languages/Python
 Requires:	python >= 1:2.1
 Requires:	python(sqlite)
+Requires:	python-Babel
 Requires:	python-genshi
 Requires:	python-setuptools >= 0.6-1.c8.1.1
 Requires:	python-subversion >= 1.2.0
@@ -198,4 +199,5 @@ fi
 %files -n python-trac
 %defattr(644,root,root,755)
 %{py_sitescriptdir}/%{name}
+%{py_sitescriptdir}/%{name}opt
 %{py_sitescriptdir}/Trac-*.egg-info
