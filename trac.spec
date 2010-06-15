@@ -1,5 +1,5 @@
 # TODO
-# - Fix build so language files are packaged (currently only build without noarch)
+# - localization fix in files
 # - package global files for inheritance, make initial projects use inherit:
 #   http://trac.edgewall.org/browser/tags/trac-0.11/RELEASE --
 #   [inherit]
@@ -32,6 +32,7 @@ URL:		http://trac.edgewall.org
 BuildRequires:	python >= 1:2.1
 BuildRequires:	python-babel >= 0.9.5
 BuildRequires:	python-devel >= 1:2.1
+BuildRequires:	python-genshi
 BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -98,7 +99,6 @@ Trac Python modules.
 rm trac/htdocs/js/jquery.js
 
 %build
-%{__python} setup.py compile_catalog
 %{__python} setup.py build
 
 %install
@@ -128,11 +128,15 @@ cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
-# compile the scripts
-#%py_ocomp $RPM_BUILD_ROOT%{py_sitescriptdir}
+# compile the optimized scripts
+%py_ocomp $RPM_BUILD_ROOT%{py_sitescriptdir}
 
 # remove .py files, leave just compiled ones.
 %py_postclean
+
+# we don't need these runtime
+rm -f $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/test.*
+rm -rf $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/tests
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -204,6 +208,29 @@ fi
 
 %files -n python-trac
 %defattr(644,root,root,755)
-%{py_sitescriptdir}/%{name}
+%dir %{py_sitescriptdir}/%{name}
+
+%{py_sitescriptdir}/trac/*.py[co]
+%dir %{py_sitescriptdir}/trac/locale
+%{py_sitescriptdir}/trac/admin
+%{py_sitescriptdir}/trac/db
+%{py_sitescriptdir}/trac/mimeview
+%{py_sitescriptdir}/trac/prefs
+%{py_sitescriptdir}/trac/search
+%{py_sitescriptdir}/trac/templates
+%{py_sitescriptdir}/trac/ticket
+%{py_sitescriptdir}/trac/timeline
+%{py_sitescriptdir}/trac/util
+%{py_sitescriptdir}/trac/versioncontrol
+%{py_sitescriptdir}/trac/web
+%{py_sitescriptdir}/trac/wiki
+
+# XXX %find_lang and move to system locale dir as trac.mo
+# XXX keep locale in main pkg only?
+%{py_sitescriptdir}/trac/locale/*
+
+# XXX keep in main pkg only?
+%{py_sitescriptdir}/trac/upgrades
+
 %{py_sitescriptdir}/%{name}opt
 %{py_sitescriptdir}/Trac-*.egg-info
