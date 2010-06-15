@@ -35,6 +35,7 @@ BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
+#Requires:	apache(mod_env) || lighttpd-mod_fastcgi
 Requires:	group(http)
 Requires:	jquery
 Requires:	python-clearsilver >= 0.9.3
@@ -42,9 +43,8 @@ Requires:	python-trac = %{version}-%{release}
 Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
-#Requires:	webserver(rewrite)
-#Requires:	webserver(setenv)
-#Suggests:	apache(mod_env)
+Requires:	webserver(mime)
+Requires:	webserver(rewrite)
 #Suggests:	apache-mod_python >= 3.1.3
 #Suggests:	lighttpd-mod_fastcgi
 #Suggests:	python-textile >= 2.0
