@@ -1,4 +1,5 @@
 # TODO
+# - Fix build so language files are packaged (currently only build without noarch)
 # - package global files for inheritance, make initial projects use inherit:
 #   http://trac.edgewall.org/browser/tags/trac-0.11/RELEASE --
 #   [inherit]
@@ -46,9 +47,6 @@ Requires:	webserver(alias)
 #Suggests:	apache(mod_env)
 #Suggests:	apache-mod_python >= 3.1.3
 #Suggests:	lighttpd-mod_fastcgi
-#Suggests:	python-docutils >= 0.6
-#Suggests:	python-pygments >= 0.6
-#Suggests:	python-silvercity >= 0.9.4
 #Suggests:	python-textile >= 2.0
 #Suggests:	webserver(auth)
 #Suggests:	webserver(cgi)
@@ -76,12 +74,15 @@ wygodne ułatwienia do raportowania.
 %package -n python-trac
 Summary:	Trac Python modules
 Group:		Development/Languages/Python
-Requires:	python >= 1:2.1
-Requires:	python-Babel
-Requires:	python-genshi
+Requires:	python >= 1:2.4
+Requires:	python-genshi >= 0.6
 Requires:	python-setuptools >= 0.6-1.c8.1.1
 Requires:	python-subversion >= 1.2.0
 Requires:	python-sqlite >= 2.5.5
+Suggests:	python-Babel >= 0.9.5
+Suggests:	python-docutils >= 0.6
+Suggests:	python-pygments >= 0.6
+#Suggests:	python-pytz
 Conflicts:	trac < 0.11.4-1.1
 
 %description -n python-trac
