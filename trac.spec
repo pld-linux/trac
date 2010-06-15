@@ -77,11 +77,11 @@ wygodne ułatwienia do raportowania.
 Summary:	Trac Python modules
 Group:		Development/Languages/Python
 Requires:	python >= 1:2.1
-Requires:	python(sqlite)
 Requires:	python-Babel
 Requires:	python-genshi
 Requires:	python-setuptools >= 0.6-1.c8.1.1
 Requires:	python-subversion >= 1.2.0
+Requires:	python-sqlite >= 2.6.0
 Conflicts:	trac < 0.11.4-1.1
 
 %description -n python-trac
