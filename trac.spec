@@ -106,6 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},/var/lib/%{name}}
 
 %{__python} setup.py install \
+	--optimize=2 \
 	--root=$RPM_BUILD_ROOT
 
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
@@ -127,9 +128,6 @@ done
 cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
-
-# compile the optimized scripts
-%py_ocomp $RPM_BUILD_ROOT%{py_sitescriptdir}
 
 # remove .py files, leave just compiled ones.
 %py_postclean
