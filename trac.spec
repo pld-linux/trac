@@ -30,6 +30,7 @@ Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
 URL:		http://trac.edgewall.org
 BuildRequires:	python >= 1:2.1
+BuildRequires:	python-babel >= 0.9.5
 BuildRequires:	python-devel >= 1:2.1
 BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
@@ -77,8 +78,8 @@ Group:		Development/Languages/Python
 Requires:	python >= 1:2.4
 Requires:	python-genshi >= 0.6
 Requires:	python-setuptools >= 0.6-1.c8.1.1
-Requires:	python-subversion >= 1.2.0
 Requires:	python-sqlite >= 2.5.5
+Requires:	python-subversion >= 1.2.0
 Suggests:	python-babel >= 0.9.5
 Suggests:	python-docutils >= 0.6
 Suggests:	python-pygments >= 0.6
@@ -95,6 +96,10 @@ Trac Python modules.
 
 # using system jquery package
 rm trac/htdocs/js/jquery.js
+
+%build
+%{__python} setup.py compile_catalog
+%{__python} setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
