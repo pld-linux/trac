@@ -28,7 +28,7 @@ Source4:	%{name}.ini
 Source5:	%{name}-enableplugin.py
 Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
-URL:		http://www.edgewall.com/trac/
+URL:		http://trac.edgewall.org
 BuildRequires:	python >= 1:2.1
 BuildRequires:	python-devel >= 1:2.1
 BuildRequires:	python-setuptools
@@ -79,11 +79,11 @@ Requires:	python-genshi >= 0.6
 Requires:	python-setuptools >= 0.6-1.c8.1.1
 Requires:	python-subversion >= 1.2.0
 Requires:	python-sqlite >= 2.5.5
-Suggests:	python-Babel >= 0.9.5
+Suggests:	python-babel >= 0.9.5
 Suggests:	python-docutils >= 0.6
 Suggests:	python-pygments >= 0.6
-#Suggests:	python-pytz
-Conflicts:	trac < 0.11.4-1.1
+Suggests:	python-pytz
+Conflicts:	trac < 0.11.7-3
 
 %description -n python-trac
 Trac Python modules.
