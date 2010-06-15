@@ -136,6 +136,22 @@ cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
 rm -f $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/test.*
 rm -rf $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/tests
 
+# collect lang files
+echo "%dir %{_appdir}/htdocs/js/messages" > %{name}.lang
+for a in $RPM_BUILD_ROOT%{_appdir}/htdocs/js/messages/*.js; do
+	f=${a##*/}
+	l=${f%.js}
+	echo "%lang($l) ${a#$RPM_BUILD_ROOT}"
+done >> %{name}.lang
+
+# TODO: move to /usr/share/locale as trac.mo catalog
+echo "%dir %{py_sitescriptdir}/trac/locale" >> %{name}.lang
+for a in $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/locale/*/LC_MESSAGES/*.mo; do
+	d=${a%%/LC_MESSAGES*}
+	l=${d##*/}
+	echo "%lang($l) ${d#$RPM_BUILD_ROOT}"
+done >> %{name}.lang
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -175,7 +191,7 @@ EOF
 
 fi
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog INSTALL README THANKS UPGRADE
 %doc contrib
@@ -196,10 +212,16 @@ fi
 %dir %{_appdir}/cgi-bin
 %attr(755,root,root) %{_appdir}/cgi-bin/trac.*cgi
 %attr(755,root,root) %{_appdir}/cgi-bin/trac.wsgi
-%{_appdir}/htdocs
-#%{_datadir}/templates
-#%{_datadir}/wiki-default
-#%{_datadir}/wiki-macros
+%dir %{_appdir}/htdocs
+%{_appdir}/htdocs/README
+%{_appdir}/htdocs/*.gif
+%{_appdir}/htdocs/*.ico
+%{_appdir}/htdocs/*.png
+%{_appdir}/htdocs/css
+%{_appdir}/htdocs/guide
+
+%dir %{_appdir}/htdocs/js
+%{_appdir}/htdocs/js/*.js
 
 # project data is stored there
 %attr(2770,root,http) %dir /var/lib/trac
@@ -222,10 +244,6 @@ fi
 %{py_sitescriptdir}/trac/versioncontrol
 %{py_sitescriptdir}/trac/web
 %{py_sitescriptdir}/trac/wiki
-
-# XXX %find_lang and move to system locale dir as trac.mo
-# XXX keep locale in main pkg only?
-%{py_sitescriptdir}/trac/locale/*
 
 # XXX keep in main pkg only?
 %{py_sitescriptdir}/trac/upgrades
