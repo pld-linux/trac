@@ -76,6 +76,7 @@ wygodne ułatwienia do raportowania.
 %package -n python-trac
 Summary:	Trac Python modules
 Group:		Development/Languages/Python
+Requires:	apache-mod_python
 Requires:	python >= 1:2.4
 Requires:	python-genshi >= 0.6
 Requires:	python-setuptools >= 0.6-1.c8.1.1
@@ -85,6 +86,7 @@ Suggests:	python-babel >= 0.9.5
 Suggests:	python-docutils >= 0.6
 Suggests:	python-pygments >= 0.6
 Suggests:	python-pytz
+Suggests:	webserver(access)
 Conflicts:	trac < 0.11.7-3
 
 %description -n python-trac
