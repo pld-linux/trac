@@ -47,6 +47,7 @@ Requires:	webserver(access)
 Requires:	webserver(alias)
 Requires:	webserver(mime)
 Requires:	webserver(rewrite)
+#Suggests:	apache-mod_python >= 3.1.3
 #Suggests:	lighttpd-mod_fastcgi
 #Suggests:	python-textile >= 2.0
 #Suggests:	webserver(auth)
@@ -80,12 +81,10 @@ Requires:	python-genshi >= 0.6
 Requires:	python-setuptools >= 0.6-1.c8.1.1
 Requires:	python-sqlite >= 2.5.5
 Requires:	python-subversion >= 1.2.0
-#Suggests:	apache-mod_python >= 3.1.3
 Suggests:	python-babel >= 0.9.5
 Suggests:	python-docutils >= 0.6
 Suggests:	python-pygments >= 0.6
 Suggests:	python-pytz
-Suggests:	webserver(access)
 Conflicts:	trac < 0.11.7-3
 
 %description -n python-trac
