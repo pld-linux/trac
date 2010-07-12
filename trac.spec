@@ -47,7 +47,6 @@ Requires:	webserver(access)
 Requires:	webserver(alias)
 Requires:	webserver(mime)
 Requires:	webserver(rewrite)
-#Suggests:	apache-mod_python >= 3.1.3
 #Suggests:	lighttpd-mod_fastcgi
 #Suggests:	python-textile >= 2.0
 #Suggests:	webserver(auth)
@@ -76,12 +75,12 @@ wygodne ułatwienia do raportowania.
 %package -n python-trac
 Summary:	Trac Python modules
 Group:		Development/Languages/Python
-Requires:	apache-mod_python
 Requires:	python >= 1:2.4
 Requires:	python-genshi >= 0.6
 Requires:	python-setuptools >= 0.6-1.c8.1.1
 Requires:	python-sqlite >= 2.5.5
 Requires:	python-subversion >= 1.2.0
+#Suggests:	apache-mod_python >= 3.1.3
 Suggests:	python-babel >= 0.9.5
 Suggests:	python-docutils >= 0.6
 Suggests:	python-pygments >= 0.6
