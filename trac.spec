@@ -16,7 +16,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.12
-Release:	4
+Release:	5
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -32,8 +32,8 @@ URL:		http://trac.edgewall.org
 BuildRequires:	python >= 1:2.1
 BuildRequires:	python-babel >= 0.9.5
 BuildRequires:	python-devel >= 1:2.1
+BuildRequires:	python-distribute
 BuildRequires:	python-genshi
-BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
@@ -77,8 +77,9 @@ wygodne ułatwienia do raportowania.
 Summary:	Trac Python modules
 Group:		Development/Languages/Python
 Requires:	python >= 1:2.4
+# python-distribute for pkg_resources module
+Requires:	python-distribute
 Requires:	python-genshi >= 0.6
-Requires:	python-setuptools >= 0.6-1.c8.1.1
 Requires:	python-sqlite >= 2.5.5
 Requires:	python-subversion >= 1.2.0
 Suggests:	python-babel >= 0.9.5
