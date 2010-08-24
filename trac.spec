@@ -16,7 +16,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.12
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -120,10 +120,8 @@ install -p %{SOURCE5} $RPM_BUILD_ROOT%{_bindir}/%{name}-enableplugin
 # webserver config each time with the upgrade.
 install -d $RPM_BUILD_ROOT%{_appdir}/cgi-bin
 mv $RPM_BUILD_ROOT{%{py_sitescriptdir}/trac,%{_appdir}}/htdocs
-for a in $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/admin/templates/deploy_trac.*; do
-	%{__sed} -i -e 's,${executable},%{__python},g' $a
-	mv $a $RPM_BUILD_ROOT%{_appdir}/cgi-bin/${a##*deploy_}
-done
+
+install -p cgi-bin/trac.*  $RPM_BUILD_ROOT%{_appdir}/cgi-bin
 
 cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
 cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
@@ -210,8 +208,8 @@ fi
 
 %dir %{_appdir}
 %dir %{_appdir}/cgi-bin
-%attr(755,root,root) %{_appdir}/cgi-bin/trac.*cgi
-%attr(755,root,root) %{_appdir}/cgi-bin/trac.wsgi
+%attr(755,root,root) %{_appdir}/cgi-bin/trac.cgi
+%attr(755,root,root) %{_appdir}/cgi-bin/trac.fcgi
 %dir %{_appdir}/htdocs
 %{_appdir}/htdocs/README
 %{_appdir}/htdocs/*.gif
