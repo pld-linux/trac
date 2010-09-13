@@ -107,6 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},/var/lib/%{name},%{_datadir}/%{name}/{plugins,templates}}
 
 %{__python} setup.py install \
+	--skip-build \
 	--optimize=2 \
 	--root=$RPM_BUILD_ROOT
 
@@ -216,7 +217,6 @@ fi
 %dir %{_appdir}/htdocs
 %dir %{_appdir}/plugins
 %dir %{_appdir}/templates
-%{_appdir}/htdocs/README
 %{_appdir}/htdocs/*.gif
 %{_appdir}/htdocs/*.ico
 %{_appdir}/htdocs/*.png
