@@ -1,22 +1,11 @@
 # TODO
 # - localization fix in files
-# - package global files for inheritance, make initial projects use inherit:
-#   http://trac.edgewall.org/browser/tags/trac-0.11/RELEASE --
-#   [inherit]
-#    file = /etc/trac/trac.ini
-#    This will load the configuration from the /etc/trac/trac.ini file, while
-#    of course allowing to override any global settings in the environment's
-#    configuration.
-#    In that global configuration, you can specify shared directories for templates and plugins, e.g.:
-#    [inherit]
-#    plugins_dir = /etc/trac/plugins/
-#    templates_dir = /etc/trac/templates/
 # - 21:07:41  jtiai> set htdocs_location in trac ini to for example /trac-htdocs/
 Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.12
-Release:	6
+Release:	7
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -28,6 +17,7 @@ Source4:	%{name}.ini
 Source5:	%{name}-enableplugin.py
 Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
+Patch2:		inherit-global-trac.ini.patch
 URL:		http://trac.edgewall.org/
 BuildRequires:	python >= 1:2.1
 BuildRequires:	python-babel >= 0.9.5
@@ -95,6 +85,7 @@ Trac Python modules.
 %setup -q -n Trac-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # using system jquery package
 rm trac/htdocs/js/jquery.js
@@ -226,6 +217,9 @@ fi
 %dir %{_appdir}/htdocs/js
 %{_appdir}/htdocs/js/*.js
 
+# keep upgrade data in main pkg only
+%{py_sitescriptdir}/trac/upgrades
+
 # project data is stored there
 %attr(2770,root,http) %dir /var/lib/trac
 
@@ -247,9 +241,6 @@ fi
 %{py_sitescriptdir}/trac/versioncontrol
 %{py_sitescriptdir}/trac/web
 %{py_sitescriptdir}/trac/wiki
-
-# XXX keep in main pkg only?
-%{py_sitescriptdir}/trac/upgrades
 
 %{py_sitescriptdir}/%{name}opt
 %{py_sitescriptdir}/Trac-*.egg-info
