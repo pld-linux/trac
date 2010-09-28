@@ -5,7 +5,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.12
-Release:	7
+Release:	8
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -15,9 +15,10 @@ Source2:	%{name}-lighttpd.conf
 Source3:	%{name}.ico
 Source4:	%{name}.ini
 Source5:	%{name}-enableplugin.py
+Source6:	%{name}-upgrade.py
 Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
-Patch2:		inherit-global-trac.ini.patch
+Patch2:		inherit-global-%{name}.ini.patch
 URL:		http://trac.edgewall.org/
 BuildRequires:	python >= 1:2.1
 BuildRequires:	python-babel >= 0.9.5
@@ -95,7 +96,7 @@ rm trac/htdocs/js/jquery.js
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sysconfdir},/var/lib/%{name},%{_datadir}/%{name}/{plugins,templates}}
+install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_sbindir},/var/lib/%{name},%{_datadir}/%{name}/{plugins,templates}}
 
 %{__python} setup.py install \
 	--skip-build \
@@ -107,7 +108,9 @@ cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 
 # utility script to enable extra plugins
-install -p %{SOURCE5} $RPM_BUILD_ROOT%{_bindir}/%{name}-enableplugin
+install -p %{SOURCE5} $RPM_BUILD_ROOT%{_sbindir}/%{name}-enableplugin
+# handle upgrades
+install -p %{SOURCE6} $RPM_BUILD_ROOT%{_sbindir}/%{name}-upgrade
 
 # keep paths from 0.10 install, we want fixed paths so we do not have to update
 # webserver config each time with the upgrade.
@@ -196,7 +199,8 @@ fi
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/trac.ini
 
 %attr(755,root,root) %{_bindir}/trac-admin
-%attr(755,root,root) %{_bindir}/trac-enableplugin
+%attr(755,root,root) %{_sbindir}/trac-enableplugin
+%attr(755,root,root) %{_sbindir}/trac-upgrade
 %attr(755,root,root) %{_bindir}/tracd
 
 #%{_mandir}/man1/trac*.1*
