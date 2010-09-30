@@ -5,7 +5,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.12
-Release:	8
+Release:	9
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -198,7 +198,6 @@ fi
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/htpasswd
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/trac.ini
 
-%attr(755,root,root) %{_bindir}/trac-admin
 %attr(755,root,root) %{_sbindir}/trac-enableplugin
 %attr(755,root,root) %{_sbindir}/trac-upgrade
 %attr(755,root,root) %{_bindir}/tracd
@@ -229,8 +228,9 @@ fi
 
 %files -n python-trac
 %defattr(644,root,root,755)
-%dir %{py_sitescriptdir}/%{name}
+%attr(755,root,root) %{_bindir}/trac-admin
 
+%dir %{py_sitescriptdir}/%{name}
 %{py_sitescriptdir}/trac/*.py[co]
 %dir %{py_sitescriptdir}/trac/locale
 %{py_sitescriptdir}/trac/admin
