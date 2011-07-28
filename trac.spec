@@ -36,13 +36,15 @@ Requires:	python-trac = %{version}-%{release}
 Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
+Requires:	webserver(auth)
+Requires:	webserver(cgi)
 Requires:	webserver(mime)
 Requires:	webserver(rewrite)
+# TODO
+# If apache is the webserver, apache-mod_python is required! What can do?
 #Suggests:	apache-mod_python >= 3.1.3
 #Suggests:	lighttpd-mod_fastcgi
 #Suggests:	python-textile >= 2.0
-#Suggests:	webserver(auth)
-#Suggests:	webserver(cgi)
 Obsoletes:	trac-plugin-webadmin
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
