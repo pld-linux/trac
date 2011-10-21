@@ -5,7 +5,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	0.12.2
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
@@ -133,7 +133,6 @@ cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
 %py_postclean
 
 # we don't need these runtime
-rm -f $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/test.*
 rm -rf $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/tests
 
 # collect lang files
