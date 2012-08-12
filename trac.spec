@@ -14,7 +14,6 @@ Source0:	http://download.edgewall.org/trac/Trac-%{version}%{subver}.tar.gz
 # Source0-md5:	09b5ca691bd2c78ac934271751ab224f
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
-Source3:	%{name}.ico
 Source4:	%{name}.ini
 Source5:	%{name}-enableplugin.py
 Source6:	%{name}-upgrade.py
@@ -127,7 +126,6 @@ rm $RPM_BUILD_ROOT%{_appdir}/htdocs/README
 install -p contrib/cgi-bin/trac.*  $RPM_BUILD_ROOT%{_appdir}/cgi-bin
 
 cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
-cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
 # remove .py files, leave just compiled ones.
