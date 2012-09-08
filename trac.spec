@@ -1,17 +1,15 @@
 # TODO
 # - localization fix in files
 # - 21:07:41  jtiai> set htdocs_location in trac ini to for example /trac-htdocs/
-%define		subver	beta1
-%define		rel		0.1
 Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	1.0
-Release:	0.%{subver}.%{rel}
+Release:	0.1
 License:	BSD-like
 Group:		Applications/WWW
-Source0:	http://download.edgewall.org/trac/Trac-%{version}%{subver}.tar.gz
-# Source0-md5:	09b5ca691bd2c78ac934271751ab224f
+Source0:	http://download.edgewall.org/trac/Trac-1.0.tar.gz
+# Source0-md5:	e07f052ec91efc1733cb9d49743ecb32
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source4:	%{name}.ini
@@ -87,7 +85,7 @@ Conflicts:	trac < 0.11.7-3
 Trac Python modules.
 
 %prep
-%setup -q -n Trac-%{version}%{?subver}
+%setup -q -n Trac-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
