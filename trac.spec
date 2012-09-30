@@ -1,14 +1,15 @@
 # TODO
+# - sync pl
 # - localization fix in files
 # - 21:07:41  jtiai> set htdocs_location in trac ini to for example /trac-htdocs/
 Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	1.0
-Release:	0.1
+Release:	1.1
 License:	BSD-like
 Group:		Applications/WWW
-Source0:	http://download.edgewall.org/trac/Trac-1.0.tar.gz
+Source0:	http://download.edgewall.org/trac/Trac-%{version}.tar.gz
 # Source0-md5:	e07f052ec91efc1733cb9d49743ecb32
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
@@ -43,8 +44,10 @@ Requires:	webserver(rewrite)
 # TODO
 # If apache is the webserver, apache-mod_python is required! What can do?
 #Suggests:	apache-mod_python >= 3.1.3
+Suggests:	git-core
 #Suggests:	lighttpd-mod_fastcgi
 #Suggests:	python-textile >= 2.0
+Obsoletes:	trac-plugin-git
 Obsoletes:	trac-plugin-webadmin
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -55,10 +58,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	%{_webapps}/%{_webapp}
 
 %description
-Trac is a minimalistic web-based software project management and
-bug/issue tracking system. It provides an interface to the Subversion
-revision control systems, an integrated wiki, flexible issue tracking
-and convenient report facilities.
+Trac is an enhanced wiki and issue tracking system for software
+development projects. Trac uses a minimalistic approach to web-based
+software project management.
+
+It provides an interface to Subversion (or other version control
+systems), an integrated Wiki and convenient reporting facilities.
 
 %description -l pl.UTF-8
 Trac to minimalistyczny, oparty na WWW zarządca projektów i system
