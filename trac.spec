@@ -6,7 +6,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	1.0
-Release:	1.1
+Release:	1.3
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://download.edgewall.org/trac/Trac-%{version}.tar.gz
@@ -20,6 +20,7 @@ Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
 Patch2:		inherit-global-%{name}.ini.patch
 Patch3:		silvercity-javascript-mimetypes.patch
+Patch4:		pyc.patch
 URL:		http://trac.edgewall.org/
 BuildRequires:	python >= 1:2.5
 BuildRequires:	python-babel >= 0.9.6
@@ -95,6 +96,7 @@ Trac Python modules.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # using system jquery package
 %{__rm} trac/htdocs/js/jquery.js
