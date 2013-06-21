@@ -6,7 +6,7 @@ Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środo
 Name:		trac
 # NOTE 1.x is on DEVEL branch, finish it there and then merge
 Version:	0.12.5
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
