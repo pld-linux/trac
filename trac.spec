@@ -17,7 +17,6 @@ Source3:	%{name}.ico
 Source4:	%{name}.ini
 Source5:	%{name}-enableplugin.py
 Source6:	%{name}-upgrade.py
-Source7:	%{name}-httpd.conf
 Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
 Patch2:		inherit-global-%{name}.ini.patch
@@ -49,7 +48,6 @@ Requires:	webserver(rewrite)
 #Suggests:	lighttpd-mod_fastcgi
 #Suggests:	python-textile >= 2.0
 Obsoletes:	trac-plugin-webadmin
-Conflicts:	apache-base < 2.4.0-1
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -111,7 +109,7 @@ install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_sbindir},/var/lib/%{name},%{_datadi
 	--root=$RPM_BUILD_ROOT
 
 cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-cp -a %{SOURCE7} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 
 # utility script to enable extra plugins
@@ -163,10 +161,10 @@ rm -rf $RPM_BUILD_ROOT
 %triggerun -- apache1 < 1.3.37-3, apache1-base
 %webapp_unregister apache %{_webapp}
 
-%triggerin -- apache-base
+%triggerin -- apache < 2.2.0, apache-base
 %webapp_register httpd %{_webapp}
 
-%triggerun -- apache-base
+%triggerun -- apache < 2.2.0, apache-base
 %webapp_unregister httpd %{_webapp}
 
 %triggerin -- lighttpd
