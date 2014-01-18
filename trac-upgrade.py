@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # Upgrade all Trac instances
+# http://trac.edgewall.org/wiki/TracUpgrade
 #
 # Author: Elan Ruusamäe <glen@delfi.ee>
 # Date: 2010-09-13
@@ -28,5 +29,7 @@ for file in glob('/var/lib/trac/*/conf/trac.ini'):
 
 		if changes:
 			env.config.save()
+
+        # TODO: do trac-admin /path/to/projenv upgrade
 	except TracError, e:
 		print e.message

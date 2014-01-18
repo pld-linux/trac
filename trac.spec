@@ -1,19 +1,18 @@
 # TODO
+# - sync pl
 # - localization fix in files
 # - 21:07:41  jtiai> set htdocs_location in trac ini to for example /trac-htdocs/
 Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
-# NOTE 1.x is on DEVEL branch, finish it there and then merge
-Version:	0.12.5
-Release:	5
+Version:	1.0.1
+Release:	1
 License:	BSD-like
 Group:		Applications/WWW
-Source0:	http://ftp.edgewall.com/pub/trac/Trac-%{version}.tar.gz
-# Source0-md5:	9ff5adef035fc8f88cc54a714288ee9b
+Source0:	http://download.edgewall.org/trac/Trac-%{version}.tar.gz
+# Source0-md5:	c869fa40e29fa4597e2c9c960de9f2f3
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
-Source3:	%{name}.ico
 Source4:	%{name}.ini
 Source5:	%{name}-enableplugin.py
 Source6:	%{name}-upgrade.py
@@ -21,18 +20,19 @@ Patch0:		%{name}-root2http.patch
 Patch1:		%{name}-defaults.patch
 Patch2:		inherit-global-%{name}.ini.patch
 Patch3:		silvercity-javascript-mimetypes.patch
+Patch4:		pyc.patch
 URL:		http://trac.edgewall.org/
-BuildRequires:	python >= 1:2.1
-BuildRequires:	python-babel >= 0.9.5
+BuildRequires:	python >= 1:2.5
+BuildRequires:	python-babel >= 0.9.6
 BuildRequires:	python-devel >= 1:2.1
 BuildRequires:	python-distribute
-BuildRequires:	python-genshi
+BuildRequires:	python-genshi >= 0.6
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 #Requires:	apache(mod_env) || lighttpd-mod_fastcgi
 Requires:	group(http)
-Requires:	jquery
+Requires:	jquery >= 1.4
 Requires:	python-clearsilver >= 0.9.3
 Requires:	python-trac = %{version}-%{release}
 Requires:	webapps
@@ -45,8 +45,10 @@ Requires:	webserver(rewrite)
 # TODO
 # If apache is the webserver, apache-mod_python is required! What can do?
 #Suggests:	apache-mod_python >= 3.1.3
+Suggests:	git-core
 #Suggests:	lighttpd-mod_fastcgi
 #Suggests:	python-textile >= 2.0
+Obsoletes:	trac-plugin-git
 Obsoletes:	trac-plugin-webadmin
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -57,10 +59,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	%{_webapps}/%{_webapp}
 
 %description
-Trac is a minimalistic web-based software project management and
-bug/issue tracking system. It provides an interface to the Subversion
-revision control systems, an integrated wiki, flexible issue tracking
-and convenient report facilities.
+Trac is an enhanced wiki and issue tracking system for software
+development projects. Trac uses a minimalistic approach to web-based
+software project management.
+
+It provides an interface to Subversion (or other version control
+systems), an integrated Wiki and convenient reporting facilities.
 
 %description -l pl.UTF-8
 Trac to minimalistyczny, oparty na WWW zarządca projektów i system
@@ -92,9 +96,10 @@ Trac Python modules.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # using system jquery package
-rm trac/htdocs/js/jquery.js
+%{__rm} trac/htdocs/js/jquery.js
 
 %build
 %{__python} setup.py build
@@ -102,15 +107,14 @@ rm trac/htdocs/js/jquery.js
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_sbindir},/var/lib/%{name},%{_datadir}/%{name}/{plugins,templates}}
-
 %{__python} setup.py install \
 	--skip-build \
 	--optimize=2 \
 	--root=$RPM_BUILD_ROOT
 
-cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
-cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
-cp -a %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/lighttpd.conf
 
 # utility script to enable extra plugins
 install -p %{SOURCE5} $RPM_BUILD_ROOT%{_sbindir}/%{name}-enableplugin
@@ -124,10 +128,9 @@ mv $RPM_BUILD_ROOT{%{py_sitescriptdir}/trac,%{_appdir}}/htdocs
 
 rm $RPM_BUILD_ROOT%{_appdir}/htdocs/README
 
-install -p cgi-bin/trac.*  $RPM_BUILD_ROOT%{_appdir}/cgi-bin
+install -p contrib/cgi-bin/trac.*  $RPM_BUILD_ROOT%{_appdir}/cgi-bin
 
-cp -a %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
-cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/htdocs/%{name}.ico
+cp -p %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/trac.ini
 > $RPM_BUILD_ROOT%{_sysconfdir}/htpasswd
 
 # remove .py files, leave just compiled ones.
@@ -144,9 +147,9 @@ for a in $RPM_BUILD_ROOT%{_appdir}/htdocs/js/messages/*.js; do
 	echo "%lang($l) ${a#$RPM_BUILD_ROOT}"
 done >> %{name}.lang
 
-# TODO: move to /usr/share/locale as trac.mo catalog
+# TODO: move to %{_localedir} as trac.mo catalog
 echo "%dir %{py_sitescriptdir}/trac/locale" >> %{name}.lang
-for a in $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/locale/*/LC_MESSAGES/*.mo; do
+for a in $RPM_BUILD_ROOT%{py_sitescriptdir}/trac/locale/*/LC_MESSAGES; do
 	d=${a%%/LC_MESSAGES*}
 	l=${d##*/}
 	echo "%lang($l) ${d#$RPM_BUILD_ROOT}"

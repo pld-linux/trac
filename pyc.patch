@@ -1,0 +1,21 @@
+Fix locating .py class
+
+2012-10-08 18:56:59,989 Trac[main] ERROR: Internal Server Error:
+Traceback (most recent call last):
+  File "/usr/share/python2.7/site-packages/trac/web/main.py", line 497, in _dispatch_request
+  File "/usr/share/python2.7/site-packages/trac/web/main.py", line 214, in dispatch
+  File "/usr/share/python2.7/site-packages/trac/mimeview/pygments.py", line 168, in process_request
+  File "/usr/share/python2.7/genericpath.py", line 54, in getmtime
+OSError: [Errno 2] No such file or directory: '/usr/share/python2.7/site-packages/pygments/styles/trac.py'
+--- Trac-1.0/./trac/mimeview/pygments.py~	2012-09-08 00:58:08.000000000 +0300
++++ Trac-1.0/./trac/mimeview/pygments.py	2012-10-08 18:59:19.289104253 +0300
+@@ -165,6 +165,9 @@
+ 
+         parts = style_cls.__module__.split('.')
+         filename = resource_filename('.'.join(parts[:-1]), parts[-1] + '.py')
++        if not os.path.exists(filename):
++            filename = resource_filename('.'.join(parts[:-1]), parts[-1] + '.pyc')
++
+         mtime = datetime.fromtimestamp(os.path.getmtime(filename), localtz)
+         last_modified = http_date(mtime)
+         if last_modified == req.get_header('If-Modified-Since'):
