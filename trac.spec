@@ -6,7 +6,7 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 Version:	1.0.2
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://download.edgewall.org/trac/Trac-%{version}.tar.gz
@@ -25,8 +25,8 @@ URL:		http://trac.edgewall.org/
 BuildRequires:	python >= 1:2.5
 BuildRequires:	python-babel >= 0.9.6
 BuildRequires:	python-devel >= 1:2.1
-BuildRequires:	python-distribute
 BuildRequires:	python-genshi >= 0.6
+BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
@@ -38,10 +38,10 @@ Requires:	python-trac = %{version}-%{release}
 Requires:	webapps
 Requires:	webserver(access)
 Requires:	webserver(alias)
-Requires:	webserver(auth)
 Requires:	webserver(cgi)
 Requires:	webserver(mime)
 Requires:	webserver(rewrite)
+Suggests:	webserver(auth)
 # TODO
 # If apache is the webserver, apache-mod_python is required! What can do?
 #Suggests:	apache-mod_python >= 3.1.3
@@ -76,9 +76,9 @@ wygodne ułatwienia do raportowania.
 Summary:	Trac Python modules
 Group:		Development/Languages/Python
 Requires:	python >= 1:2.4
-# python-distribute for pkg_resources module
-Requires:	python-distribute
 Requires:	python-genshi >= 0.6
+# python-setuptools for pkg_resources module
+Requires:	python-setuptools
 Requires:	python-sqlite >= 2.5.5
 Requires:	python-subversion >= 1.2.0
 Suggests:	python-babel >= 0.9.5
