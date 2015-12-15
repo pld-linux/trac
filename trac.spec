@@ -6,12 +6,12 @@ Summary:	Integrated SCM, Wiki, Issue tracker and project environment
 Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środowisko projektowe
 Name:		trac
 # 1.1.x line is devel
-Version:	1.0.8
-Release:	2
+Version:	1.0.9
+Release:	1
 License:	BSD-like
 Group:		Applications/WWW
 Source0:	http://download.edgewall.org/trac/Trac-%{version}.tar.gz
-# Source0-md5:	a2fc666afd4e59a72ad76d8292d39111
+# Source0-md5:	429d9aa79e3d939add7963ca9a7deb57
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source4:	%{name}.ini
@@ -29,7 +29,7 @@ BuildRequires:	python-devel >= 1:2.1
 BuildRequires:	python-genshi >= 0.6
 BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.713
 BuildRequires:	sed >= 4.0
 #Requires:	apache(mod_env) || lighttpd-mod_fastcgi
 Requires:	group(http)
@@ -103,15 +103,12 @@ Trac Python modules.
 %{__rm} trac/htdocs/js/jquery.js
 
 %build
-%{__python} setup.py build
+%py_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sysconfdir},%{_sbindir},/var/lib/%{name},%{_datadir}/%{name}/{plugins,templates}}
-%{__python} setup.py install \
-	--skip-build \
-	--optimize=2 \
-	--root=$RPM_BUILD_ROOT
+%py_install
 
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
