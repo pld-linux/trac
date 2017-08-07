@@ -7,12 +7,12 @@ Summary(pl.UTF-8):	Zintegrowane scm, wiki, system śledzenia problemów i środo
 Name:		trac
 # 1.1.x line is devel
 # release notes: https://trac.edgewall.org/wiki/TracDev/ReleaseNotes/1.0#MaintenanceRelease
-Version:	1.0.12
+Version:	1.0.15
 Release:	1
 License:	BSD-like
 Group:		Applications/WWW
-Source0:	http://download.edgewall.org/trac/Trac-%{version}.tar.gz
-# Source0-md5:	941e333b0c0c81d5c4f4e086174a26e7
+Source0:	https://download.edgewall.org/trac/Trac-%{version}.tar.gz
+# Source0-md5:	f0f498064fe295e1bd1993749f86d0ee
 Source1:	%{name}-apache.conf
 Source2:	%{name}-lighttpd.conf
 Source4:	%{name}.ini
@@ -23,7 +23,7 @@ Patch1:		%{name}-defaults.patch
 Patch2:		inherit-global-%{name}.ini.patch
 Patch3:		silvercity-javascript-mimetypes.patch
 Patch4:		pyc.patch
-URL:		http://trac.edgewall.org/
+URL:		https://trac.edgewall.org/
 BuildRequires:	python >= 1:2.5
 BuildRequires:	python-babel >= 0.9.6
 BuildRequires:	python-devel >= 1:2.1
